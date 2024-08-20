@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.28)
+project(Minecraft)
+
+set(CMAKE_CXX_STANDARD 11)
+
+add_executable(Minecraft main.cpp
+        Camera.cpp
+        glad.c
+        helper.cpp
+        Shader.cpp
+        stb_image.cpp
+        GrassCube.cpp
+        GrassCube.h)
+
+
+
+target_include_directories(Minecraft PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(Minecraft GL sfml-graphics sfml-window sfml-system)
