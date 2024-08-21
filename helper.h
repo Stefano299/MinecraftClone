@@ -11,5 +11,6 @@
 #include <sstream>
 
 std::string loadShader(const char* path);
+int probability(float prob); //Ritorna 1 con una probabilità = prob (massimo una cifra decimale)
 
 #endif //OPENGL_HELPER_H

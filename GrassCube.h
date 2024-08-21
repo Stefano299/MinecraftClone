@@ -36,7 +36,6 @@ public:
     static void updateMatrix(const glm::mat4& view, const glm::mat4& projection);
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
-    ~GrassCube();
 };
 
 

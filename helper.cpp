@@ -3,6 +3,8 @@
 //
 
 #include"helper.h"
+#include<cstdlib>
+#include<ctime>
 
 
 std::string loadShader(const char* path){
@@ -27,4 +29,14 @@ std::string loadShader(const char* path){
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
     return shaderCode;
+}
+
+int probability(float prob){
+    int probNum = prob*10;
+    int num = 1+rand()%1000; //da 1 a 1000
+    std::cout << num << std::endl;
+    if(num <= probNum)
+        return 1;
+    else
+        return 0;
 }

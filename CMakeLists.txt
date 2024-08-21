@@ -10,7 +10,10 @@ add_executable(Minecraft main.cpp
         Shader.cpp
         stb_image.cpp
         GrassCube.cpp
-        GrassCube.h)
+        GrassCube.h
+        constants.h
+        CubesContainer.cpp
+        CubesContainer.h)
 
 
 

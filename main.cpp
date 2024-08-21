@@ -14,6 +14,10 @@
 #include"Shader.h"
 #include "Camera.h"
 #include"GrassCube.h"
+#include"constants.h"
+#include"CubesContainer.h"
+#include<cstdlib>
+
 
 void initWindow(sf::Window& window);
 void initOpenGL();
@@ -23,12 +27,12 @@ int main() {
     initOpenGL();
 
     GrassCube::init();
-    GrassCube grassCube(glm::vec3(0.0, 0.0, 0.0), Type::Grass);
-    GrassCube grass2(glm::vec3 (2.0, 0.0, 0.0), Type::Terrain);
+    CubesContainer container;
+    container.genCube(glm::vec3(-4, -5, 5), 90, 5, 90);
 
     Camera camera;
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1600.f/1200.f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
     while(window.isOpen()){
@@ -48,10 +52,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         camera.handleMovement();
+        std::cout << probability(89.9) << std::endl;
 
-        grass2.draw();
-
-        grassCube.draw();
+        container.drawCubes();
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
@@ -79,18 +82,19 @@ void initWindow(sf::Window& window){
     settings.majorVersion = 3;
     settings.attributeFlags = sf::ContextSettings::Core;
     settings.depthBits = 24;
-    window.create(sf::VideoMode(1600, 1200), "Minecraft", sf::Style::Default, settings);
+    window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
     window.setFramerateLimit(60);
     window.setActive();
     window.setMouseCursorVisible(false);
 }
 
 void initOpenGL(){
+    srand(time(0)); //TODO qua non ci sta ma va beh per ora lo lascio
     if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(sf::Context::getFunction))){
         std::cerr << "Errore nel caricamento di glad" << std::endl;
     }
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2, 0.3, 0.3, 1.0);
-    glViewport(0, 0, 1600, 1200);
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }

@@ -8,11 +8,11 @@
 Camera::Camera() {
     yaw = -90.0f;
     pitch = 0.0f;
-    speed = 0.08f;
+    speed = 0.12f;
     sensitivity = 0.1f;
     lastX = 800;
     lastY = 600;
-    cameraPos = glm::vec3(0.0, 0.0, 6.0);
+    cameraPos = glm::vec3(0.0, 0.0, 20.0);
     cameraFront = glm::vec3(0.0, 0.0, -1.0);
 }
 
@@ -28,6 +28,14 @@ void Camera::handleMovement() {
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
         cameraPos += glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)))*speed;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+        glm::vec3 right = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)));
+        cameraPos += glm::normalize(glm::cross(right, cameraFront))*speed;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+        glm::vec3 right = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)));
+        cameraPos -= glm::normalize(glm::cross(right, cameraFront))*speed;
     }
 }
 

@@ -77,6 +77,8 @@ GrassCube::GrassCube(const glm::vec3 &pos, Type type)
 
 void GrassCube::draw() const {
     glBindVertexArray(VAO);
+    // e porca troia se ho due tipi differenti non si disegano entambi qualcuno mi aiuti
+    //qualcuno mi aiuti sto  impazzendo grazie
     if(type == Type::Grass) {
         grassShader.useProgram();
         grassShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
@@ -100,13 +102,6 @@ void GrassCube::draw() const {
     //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-GrassCube::~GrassCube() {
-    glDeleteBuffers(1, &VBO);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteTextures(1, &sideTexture);
-    glDeleteTextures(1, &topTexture);
-    glDeleteTextures(1, &bottomTexture);
-}
 
 void GrassCube::init() {
     glGenVertexArrays(1, &VAO);
@@ -120,6 +115,7 @@ void GrassCube::init() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (void*)(sizeof(float)*3));
     glEnableVertexAttribArray(1);
 
+    //codice di merda dovevo fare una classe texture ma senttie che cazzo me ne frega tanto è solo un cubo
     glGenTextures(1, &sideTexture);
     glBindTexture(GL_TEXTURE_2D, sideTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -168,8 +164,10 @@ void GrassCube::init() {
 }
 
 void GrassCube::updateMatrix(const glm::mat4 &view, const glm::mat4& projection) {
+    grassShader.useProgram();
     grassShader.changeUniform4M("view", view);
     grassShader.changeUniform4M("projection", projection);
+    terrainShader.useProgram();
     terrainShader.changeUniform4M("view", view);
     terrainShader.changeUniform4M("projection", projection);
 }
