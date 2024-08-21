@@ -67,6 +67,7 @@ GrassCube::GrassCube(const glm::vec3 &pos, Type type)
 {
     this->pos = pos;
     this->type = type;
+    hidden = false;
     if(type == Type::Grass){
         grassShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
     }
@@ -178,4 +179,20 @@ const glm::vec3 &GrassCube::getPos() const {
 
 void GrassCube::setPos(const glm::vec3& newPos) {
     pos = newPos;
+}
+
+bool GrassCube::operator!=(const GrassCube &right) const{
+    if(pos != right.pos){
+        return true;
+    }
+    else
+        return false;
+}
+
+void GrassCube::setHidden(bool h) {
+    hidden = h;
+}
+
+bool GrassCube::isHidden() const {
+    return hidden;
 }

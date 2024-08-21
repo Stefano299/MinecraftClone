@@ -34,9 +34,18 @@ std::string loadShader(const char* path){
 int probability(float prob){
     int probNum = prob*10;
     int num = 1+rand()%1000; //da 1 a 1000
-    std::cout << num << std::endl;
+    std::cout << num << " "  << probNum << std::endl;
     if(num <= probNum)
         return 1;
+    else
+        return 0;
+}
+
+int getSign(int x){
+    if(x > 0)
+        return 1;
+    else if(x < 0)
+        return -1;
     else
         return 0;
 }

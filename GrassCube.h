@@ -27,6 +27,7 @@ private:
     static unsigned int bottomTexture;
     static Shader grassShader;
     static Shader terrainShader;
+    bool hidden; //Se è circondato da cubi è nasconto e non va disegnato
     Type type;
     glm::vec3 pos;
 public:
@@ -36,6 +37,9 @@ public:
     static void updateMatrix(const glm::mat4& view, const glm::mat4& projection);
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
+    bool operator!=(const GrassCube& right) const;
+    void setHidden(bool h);
+    bool isHidden() const;
 };
 
 

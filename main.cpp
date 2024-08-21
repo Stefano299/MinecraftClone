@@ -28,7 +28,7 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-4, -5, 5), 90, 5, 90);
+    container.genCube(glm::vec3(-4, -5, 5), 30, 5, 20);
 
     Camera camera;
 
@@ -52,7 +52,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         camera.handleMovement();
-        std::cout << probability(89.9) << std::endl;
 
         container.drawCubes();
 
