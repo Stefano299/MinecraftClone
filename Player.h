@@ -29,7 +29,7 @@ private:
     float speed;
 public:
     explicit Player(const glm::vec3& pos, float speed = 0.2);
-    void draw(const glm::mat4& projection, const glm::mat4& view) const;
+    void draw(const glm::mat4& projection, const glm::mat4& view, const glm::vec3& cameraPos) const;
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
     void handleInput();

@@ -61,7 +61,7 @@ int main() {
 
         lightSource.draw(projection, view);
         container.drawCubes();
-        player.draw(projection, view);
+        player.draw(projection, view, camera.getPos());
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 

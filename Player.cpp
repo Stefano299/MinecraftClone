@@ -121,10 +121,11 @@ void Player::calculateNormals() {
 }
 
 
-void Player::draw(const glm::mat4 &projection, const glm::mat4 &view) const {
+void Player::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3& cameraPos) const {
     shader.useProgram();
     shader.changeUniform4M("view", view);
     shader.changeUniform4M("projection", projection);
+    shader.changeUniformVec3("cameraPos", cameraPos.x, cameraPos.y, cameraPos.z);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 216+324/3);
