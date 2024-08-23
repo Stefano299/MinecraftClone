@@ -16,6 +16,7 @@
 #include"GrassCube.h"
 #include"constants.h"
 #include"CubesContainer.h"
+#include"Player.h"
 #include<cstdlib>
 
 
@@ -35,6 +36,9 @@ int main() {
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
+    Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
+    GrassCube cube(glm::vec3(-4.0, 5.0, 0.0), Type::Grass);
+
     while(window.isOpen()){
         sf::Event event;
         while(window.pollEvent(event)){
@@ -52,8 +56,12 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         camera.handleMovement();
+        player.handleInput();
+        cube.draw();
 
-        container.drawCubes();
+
+        //container.drawCubes();
+        player.draw(projection, view);
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 

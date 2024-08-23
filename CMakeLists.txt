@@ -13,7 +13,9 @@ add_executable(Minecraft main.cpp
         GrassCube.h
         constants.h
         CubesContainer.cpp
-        CubesContainer.h)
+        CubesContainer.h
+        Player.cpp
+        Player.h)
 
 
 

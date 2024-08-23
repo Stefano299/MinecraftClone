@@ -18,6 +18,7 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
             }
         }
     }
+
     setHidden(); //Una volta creati decido quali non vanno disegnati
 
     /*for(int i = 0; i < width; i++){
