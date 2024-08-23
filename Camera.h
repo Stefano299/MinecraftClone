@@ -23,7 +23,7 @@ private:
     glm::vec3 cameraPos;
     glm::vec3 cameraFront;
 public:
-    Camera();
+    explicit Camera(const glm::vec3& pos);
     void handleMovement();
     void handleRotation(const sf::Event& event);
     void reset(sf::Window& window);

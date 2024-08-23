@@ -17,6 +17,7 @@
 #include"constants.h"
 #include"CubesContainer.h"
 #include"Player.h"
+#include"Sphere.h"
 #include<cstdlib>
 
 
@@ -29,15 +30,15 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-4, -5, 5), 30, 5, 20);
+    container.genCube(glm::vec3(-10, -1.5, 10), 20, 5, 20);
 
-    Camera camera;
+    Camera camera(glm::vec3(0.0, 0.0, 20.0));
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
     Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
-    GrassCube cube(glm::vec3(-4.0, 5.0, 0.0), Type::Grass);
+    Sphere lightSource(glm::vec3 (0, 10, 0), player);
 
     while(window.isOpen()){
         sf::Event event;
@@ -57,10 +58,9 @@ int main() {
 
         camera.handleMovement();
         player.handleInput();
-        cube.draw();
 
-
-        //container.drawCubes();
+        lightSource.draw(projection, view);
+        container.drawCubes();
         player.draw(projection, view);
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));

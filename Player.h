@@ -19,8 +19,8 @@ private:
     void createVertices();
     void calculateNormals();
     void createShader();
-    float vertices[648];
-    float normals[648]; //Per ogni vertici dò il vettore normale
+    float vertices[648+324];
+    float normals[648+324]; //Per ogni vertici dò il vettore normale
     unsigned int VAO;
     unsigned int verticesVBO;
     unsigned int normalsVBO;
@@ -33,6 +33,7 @@ public:
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
     void handleInput();
+    void setLightPos(const glm::vec3& pos) const;
 };
 
 

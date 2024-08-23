@@ -15,7 +15,9 @@ add_executable(Minecraft main.cpp
         CubesContainer.cpp
         CubesContainer.h
         Player.cpp
-        Player.h)
+        Player.h
+        Sphere.cpp
+        Sphere.h)
 
 
 
