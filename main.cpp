@@ -30,7 +30,7 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-10, -1.5, 10), 20, 5, 20);
+    container.genCube(glm::vec3(-10, -1.5, 10), 40, 5, 40);
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0));
 
@@ -38,7 +38,9 @@ int main() {
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
     Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
-    Sphere lightSource(glm::vec3 (0, 10, 0), player);
+    Sphere lightSource(glm::vec3 (0, 10, 30), player);
+
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while(window.isOpen()){
         sf::Event event;

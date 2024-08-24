@@ -69,11 +69,14 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
 }
 
 void CubesContainer::drawCubes() const {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     for(auto it: cubes){
         if(!it.isHidden()) {
             it.draw();
         }
     }
+    glDisable(GL_CULL_FACE);
 }
 
 bool CubesContainer::isPresent(const glm::vec3 &pos) const {
