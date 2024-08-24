@@ -9,17 +9,22 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
     for(int i = 0; i < width; i++){
         for(int j = 0; j < height; j++){
             for(int k = 0; k < depth; k++){
+                glm::vec3 cubePos = pos + glm::vec3(i, -j, -k);
+                glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), cubePos);
                 if(j > 0) {
-                    cubes.push_back(GrassCube(pos + glm::vec3(i, -j, -k), Type::Terrain));
+                    cubes.push_back(GrassCube(cubePos, Type::Terrain));
+                    cubesModel.push_back(cubeModel);
                 }
                 else if(j == 0){
-                    cubes.push_back(GrassCube(pos + glm::vec3(i, -j, -k), Type::Grass));
+                    cubes.push_back(GrassCube(cubePos, Type::Grass));
+                    cubesModel.push_back(cubeModel);
                 }
             }
         }
     }
 
-    setHidden(); //Una volta creati decido quali non vanno disegnati
+    //setHidden(); //Una volta creati decido quali non vanno disegnati
+    setInstances();
 
     /*for(int i = 0; i < width; i++){
         int j = 0;
@@ -71,11 +76,13 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
 void CubesContainer::drawCubes() const {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    for(auto it: cubes){
+    /*for(auto it: cubes){
         if(!it.isHidden()) {
             it.draw();
         }
-    }
+    }*/
+    GrassCube::draw();
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, cubes.size());
     glDisable(GL_CULL_FACE);
 }
 
@@ -122,4 +129,25 @@ void CubesContainer::setHidden() {
             it.setHidden(true);
         }
     }
+}
+
+void CubesContainer::setInstances() {
+    std::size_t vec4Size = sizeof(glm::vec4);
+    glBindVertexArray(GrassCube::getVAO());
+    glGenBuffers(1, &instancesVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, instancesVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*cubesModel.size(), cubesModel.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)0);
+    glEnableVertexAttribArray(2);
+    glVertexAttribDivisor(2, 1);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)(1 * vec4Size));
+    glEnableVertexAttribArray(3);
+    glVertexAttribDivisor(3, 1);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)(2 * vec4Size));
+    glEnableVertexAttribArray(4);
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)(3 * vec4Size));
+    glEnableVertexAttribArray(5);
+    glVertexAttribDivisor(5, 1);
+
 }

@@ -69,36 +69,30 @@ GrassCube::GrassCube(const glm::vec3 &pos, Type type)
     this->pos = pos;
     this->type = type;
     hidden = false;
+    model = glm::translate(glm::mat4(1.0), pos);
     if(type == Type::Grass){
-        grassShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+        grassShader.useProgram();
+        grassShader.changeUniform4M("model", model);
     }
     else if(type == Type::Terrain){
-        terrainShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+        terrainShader.useProgram();
+        terrainShader.changeUniform4M("model", model);
     }
 }
 
-void GrassCube::draw() const {
+void GrassCube::draw() {
     glBindVertexArray(VAO);
     // e porca troia se ho due tipi differenti non si disegano entambi qualcuno mi aiuti
     //qualcuno mi aiuti sto  impazzendo grazie
-    if(type == Type::Grass) {
+
         grassShader.useProgram();
-        grassShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, sideTexture);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, topTexture);
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, bottomTexture);
-    }
-    else if(type == Type::Terrain){
-        terrainShader.useProgram();
-        terrainShader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, bottomTexture);
-    }
 
-    glDrawArrays(GL_TRIANGLES, 0, 36);
 
     //Oh ma dove stramaledattamente è sto bug cazzo
     //glBindTexture(GL_TEXTURE_2D, 0);
@@ -180,6 +174,7 @@ const glm::vec3 &GrassCube::getPos() const {
 
 void GrassCube::setPos(const glm::vec3& newPos) {
     pos = newPos;
+    model = glm::translate(glm::mat4(1.0), pos);
 }
 
 bool GrassCube::operator!=(const GrassCube &right) const{
@@ -196,4 +191,12 @@ void GrassCube::setHidden(bool h) {
 
 bool GrassCube::isHidden() const {
     return hidden;
+}
+
+unsigned int GrassCube::getVAO() {
+    return VAO;
+}
+
+const glm::mat4& GrassCube::getModel() const {
+    return model;
 }

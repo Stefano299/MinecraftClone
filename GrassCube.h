@@ -30,16 +30,19 @@ private:
     bool hidden; //Se è circondato da cubi è nasconto e non va disegnato
     Type type;
     glm::vec3 pos;
+    glm::mat4 model;
 public:
     GrassCube(const glm::vec3& pos, Type type);
     static void init();
-    void draw() const;
+    static void draw();
     static void updateMatrix(const glm::mat4& view, const glm::mat4& projection);
+    static unsigned int getVAO();
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
     bool operator!=(const GrassCube& right) const;
     void setHidden(bool h);
     bool isHidden() const;
+    const glm::mat4& getModel() const;
 };
 
 

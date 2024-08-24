@@ -31,7 +31,7 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-10, -1.5, 10), 40, 5, 40);
+    container.genCube(glm::vec3(-10, -1.5, 10), 100, 100, 100);
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0));
 
@@ -43,7 +43,12 @@ int main() {
     SkyBox skyBox;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    sf::Clock clock;
+    sf::Time time;
     while(window.isOpen()){
+        time = clock.getElapsedTime();
+        std::cout << 1.f/time.asSeconds() << std::endl;
+        clock.restart();
         sf::Event event;
         while(window.pollEvent(event)){
             if(event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)){
