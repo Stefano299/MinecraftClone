@@ -6,6 +6,10 @@
 #include"helper.h"
 
 void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int depth) {
+    int nCubes = width*height*depth;
+    cubes.reserve(nCubes);
+    cubesModel.reserve(nCubes);
+    cubesType.reserve(nCubes);
     for(int i = 0; i < width; i++){
         for(int j = 0; j < height; j++){
             for(int k = 0; k < depth; k++){
@@ -14,10 +18,12 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                 if(j > 0) {
                     cubes.push_back(GrassCube(cubePos, Type::Terrain));
                     cubesModel.push_back(cubeModel);
+                    cubesType.push_back(0);
                 }
                 else if(j == 0){
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
                     cubesModel.push_back(cubeModel);
+                    cubesType.push_back(1);
                 }
             }
         }
@@ -74,6 +80,7 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
 }
 
 void CubesContainer::drawCubes() const {
+    int instanceCount = cubes.size();
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     /*for(auto it: cubes){
@@ -82,7 +89,7 @@ void CubesContainer::drawCubes() const {
         }
     }*/
     GrassCube::draw();
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, cubes.size());
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, instanceCount);
     glDisable(GL_CULL_FACE);
 }
 
@@ -132,11 +139,13 @@ void CubesContainer::setHidden() {
 }
 
 void CubesContainer::setInstances() {
+    int nCubes = cubesModel.size();
     std::size_t vec4Size = sizeof(glm::vec4);
     glBindVertexArray(GrassCube::getVAO());
     glGenBuffers(1, &instancesVBO);
     glBindBuffer(GL_ARRAY_BUFFER, instancesVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*cubesModel.size(), cubesModel.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*nCubes+sizeof(int)*nCubes, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(glm::mat4)*nCubes, cubesModel.data());
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)0);
     glEnableVertexAttribArray(2);
     glVertexAttribDivisor(2, 1);
@@ -149,5 +158,15 @@ void CubesContainer::setInstances() {
     glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vec4Size*4, (void*)(3 * vec4Size));
     glEnableVertexAttribArray(5);
     glVertexAttribDivisor(5, 1);
-
+    glBufferSubData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*nCubes, sizeof(int)*nCubes, cubesType.data());
+    glVertexAttribIPointer(6, 1, GL_INT, sizeof(int), (void*)(nCubes*vec4Size*4));
+    glEnableVertexAttribArray(6);
+    glVertexAttribDivisor(6, 1);
+    /*unsigned int otherVBO;
+    glGenBuffers(1, &otherVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, otherVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(int)*nCubes, cubesType.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(6, 1, GL_INT, GL_FALSE, sizeof(int), (void*)0);
+    glEnableVertexAttribArray(6);
+    glVertexAttribDivisor(6, 1);*/
 }

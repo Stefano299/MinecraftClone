@@ -62,7 +62,6 @@ unsigned int GrassCube::sideTexture = 0;
 unsigned int GrassCube::topTexture = 0;
 unsigned int GrassCube::bottomTexture = 0;
 Shader GrassCube::grassShader;
-Shader GrassCube::terrainShader;
 
 GrassCube::GrassCube(const glm::vec3 &pos, Type type)
 {
@@ -70,28 +69,20 @@ GrassCube::GrassCube(const glm::vec3 &pos, Type type)
     this->type = type;
     hidden = false;
     model = glm::translate(glm::mat4(1.0), pos);
-    if(type == Type::Grass){
-        grassShader.useProgram();
-        grassShader.changeUniform4M("model", model);
-    }
-    else if(type == Type::Terrain){
-        terrainShader.useProgram();
-        terrainShader.changeUniform4M("model", model);
-    }
+    grassShader.useProgram();
+    grassShader.changeUniform4M("model", model);
 }
 
 void GrassCube::draw() {
     glBindVertexArray(VAO);
-    // e porca troia se ho due tipi differenti non si disegano entambi qualcuno mi aiuti
-    //qualcuno mi aiuti sto  impazzendo grazie
 
-        grassShader.useProgram();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, sideTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, topTexture);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, bottomTexture);
+    grassShader.useProgram();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, sideTexture);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, topTexture);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, bottomTexture);
 
 
     //Oh ma dove stramaledattamente è sto bug cazzo
@@ -150,22 +141,12 @@ void GrassCube::init() {
     grassShader.changeUniform1i("side", 0);
     grassShader.changeUniform1i("top", 1);
     grassShader.changeUniform1i("bottom", 2);
-
-    terrainShader.loadVertex("../vGrass.glsl");
-    terrainShader.loadFragment("../fTerrain.glsl");
-    terrainShader.createProgram();
-
-    terrainShader.useProgram();
-    terrainShader.changeUniform1i("texture1", 0);
 }
 
 void GrassCube::updateMatrix(const glm::mat4 &view, const glm::mat4& projection) {
     grassShader.useProgram();
     grassShader.changeUniform4M("view", view);
     grassShader.changeUniform4M("projection", projection);
-    terrainShader.useProgram();
-    terrainShader.changeUniform4M("view", view);
-    terrainShader.changeUniform4M("projection", projection);
 }
 
 const glm::vec3 &GrassCube::getPos() const {

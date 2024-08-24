@@ -13,6 +13,7 @@ private:
     unsigned int instancesVBO;
     std::vector<GrassCube> cubes;
     std::vector<glm::mat4> cubesModel;
+    std::vector<int> cubesType; //0=terrain, 1=grass
     bool isPresent(const glm::vec3& pos) const; //Per determinare se in una posizione si trova un cubo
     bool isOnSameY(const GrassCube& cube) const; //Ritorna vero se è presente un blocco adiacete alla stessa altezza
     int nSurroundingCubes(const GrassCube& cube) const;//Ritorna il numero di cubi adiacenti

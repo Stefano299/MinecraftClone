@@ -31,7 +31,7 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-10, -1.5, 10), 100, 100, 100);
+    container.genCube(glm::vec3(-10, -1.5, 10), 100, 50, 100);
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0));
 
@@ -101,7 +101,7 @@ void initWindow(sf::Window& window){
     settings.attributeFlags = sf::ContextSettings::Core;
     settings.depthBits = 24;
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
-    window.setFramerateLimit(60);
+    //window.setFramerateLimit(60);
     window.setActive();
     window.setMouseCursorVisible(false);
 }

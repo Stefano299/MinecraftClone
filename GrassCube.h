@@ -26,7 +26,6 @@ private:
     static unsigned int topTexture;
     static unsigned int bottomTexture;
     static Shader grassShader;
-    static Shader terrainShader;
     bool hidden; //Se è circondato da cubi è nasconto e non va disegnato
     Type type;
     glm::vec3 pos;
