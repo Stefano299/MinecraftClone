@@ -17,7 +17,9 @@ add_executable(Minecraft main.cpp
         Player.cpp
         Player.h
         Sphere.cpp
-        Sphere.h)
+        Sphere.h
+        SkyBox.cpp
+        SkyBox.h)
 
 
 

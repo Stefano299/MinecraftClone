@@ -18,6 +18,7 @@
 #include"CubesContainer.h"
 #include"Player.h"
 #include"Sphere.h"
+#include"SkyBox.h"
 #include<cstdlib>
 
 
@@ -39,7 +40,7 @@ int main() {
 
     Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
     Sphere lightSource(glm::vec3 (0, 10, 30), player);
-
+    SkyBox skyBox;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while(window.isOpen()){
@@ -61,9 +62,12 @@ int main() {
         camera.handleMovement();
         player.handleInput();
 
+
         lightSource.draw(projection, view);
         container.drawCubes();
         player.draw(projection, view, camera.getPos());
+        skyBox.draw(projection, glm::mat4(glm::mat3(view)));
+
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 

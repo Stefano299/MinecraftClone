@@ -12,7 +12,7 @@ void main() {
     vec3 objectColor = vec3(16/235.f, 101/235.f, 230/235.f);
     vec3 lightColor = vec3(0.974, 1.0, 0.71);
 
-    float ambientStength = 0.2;
+    float ambientStength = 0.5;
 
     vec3 ambientLight = ambientStength*lightColor;
 
