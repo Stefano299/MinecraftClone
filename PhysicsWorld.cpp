@@ -4,10 +4,11 @@
 
 #include "PhysicsWorld.h"
 
-bool PhysicsWorld::isPlayerFalling() const {
+bool PhysicsWorld::isPlayerFalling(glm::vec3& collidingCubePos) const {
     for(const auto& it: cubesContainer->getTopCubesPos()){
         glm::vec3 futurePlayerPos = player->getPos()+glm::vec3(0.0, fallCoeff, 0.0);
         if(isCubeColliding(it, futurePlayerPos)){
+            collidingCubePos = it;
             return false;
         }
     }
@@ -32,26 +33,33 @@ bool PhysicsWorld::isCubeColliding(const glm::vec3& cubePos, const glm::vec3& pl
 }
 
 void PhysicsWorld::playerFall() {
-    if(isPlayerFalling()){
+    glm::vec3 collidingCubePos;
+    if(isPlayerFalling(collidingCubePos)){ //Assegna alla variabile la posizione del cubo con cui collide
         if(!player->isFalling()) {
             player->setFalling(true);
             startFallingTime = frameTime;
         }
         float elapsedTime = (frameTime-startFallingTime)*0.2f;
-        player->setPos(player->getPos()+(glm::vec3 (0.0, -0.02*elapsedTime, 0.0)));
+        player->changeY(-0.02*elapsedTime);
         fallCoeff = -0.02f*((frameTime+1-startFallingTime)*0.2f); //Devo contare quella che avrà al frame dopo
+        if(fallCoeff >= 1) fallCoeff = 1; //Sennò se è troppo grande controla il cubo sotto
     }
     else{
-        player->setFalling(false);
-        fallCoeff = 0;
-        startFallingTime = 0;
+        if(player->isFalling()){ //Voglio che il blocco venga eseguto solo nel frame dopo che smette di cadere
+            glm::vec3 playerPos = player->getPos();
+            glm::vec3 newPos = glm::vec3 (playerPos.x, collidingCubePos.y+1.5, playerPos.z);
+            player->setPos(newPos); //Per evitare che player venga teletrasportato troppo su, quando deve smette di cadere lo porto direttamente sopra il cubo sotto
+            player->setJumping(false); //Quando tocca terra smette di saltare
+            player->setFalling(false);
+            fallCoeff = 0;
+            startFallingTime = 0;
+        }
     }
 }
 
 bool PhysicsWorld::isPlayerCollidingSides(const glm::vec3& move) const {
     for(const auto& it: cubesContainer->getSideCubesPos()){
-        //devo mettere fallcoeef
-        glm::vec3 futurePlayerPos = player->getPos()+glm::vec3(move.x, 0, move.z); //XZ devono considerare il movimento laterale
+        glm::vec3 futurePlayerPos = player->getPos()+glm::vec3(move.x, fallCoeff, move.z); //XZ devono considerare il movimento laterale
         if(isCubeSideColliding(it, futurePlayerPos)){
             return true;
         }
@@ -72,5 +80,11 @@ void PhysicsWorld::playerSideCollisions(const glm::vec3& move) const{
     }
     else{
         player->setSideColliding(false);
+    }
+}
+
+void PhysicsWorld::playerJump() const {
+    if(player->isJumping()){
+        player->changeY(0.14);
     }
 }

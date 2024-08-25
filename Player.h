@@ -30,6 +30,7 @@ private:
     float speed;
     bool falling;
     bool sideColliding;
+    bool jumping;
 public:
     explicit Player(const glm::vec3& pos, float speed = 0.2);
     void setPhysicsWorld( PhysicsWorld* physicsWorld1);
@@ -43,6 +44,9 @@ public:
     float getSpeed() const;
     void setSideColliding(bool c);
     bool isSideColliding() const;
+    bool isJumping() const;
+    void setJumping(bool j);
+    void changeY(float dy);
 };
 
 

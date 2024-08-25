@@ -162,6 +162,9 @@ void Player::handleInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         move.x -= 1;
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+        if(!jumping && !falling) jumping = true;
+    }
     //Solita cosa per impedire vada più veloce in diagonale
     if (abs(move.x) + abs(move.z) ==
         2) {  //Se normalizzo il vettore ed ha un solo componente dà componenti indefiniti
@@ -208,5 +211,19 @@ bool Player::isSideColliding() const {
 
 void Player::setPhysicsWorld(PhysicsWorld *physicsWorld1) {
     this->physicsWorld =physicsWorld1;
+}
+
+void Player::changeY(float dy) {
+    pos+= glm::vec3(0.0, dy, 0.0);
+    shader.useProgram();
+    shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+}
+
+bool Player::isJumping() const {
+    return jumping;
+}
+
+void Player::setJumping(bool j) {
+    jumping = j;
 }
 

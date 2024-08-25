@@ -73,8 +73,10 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         camera.handleMovement();
-        player.handleInput();
+        player.handleInput();  //Deve stare prima per jumping
+        physicsWorld.playerJump();//Deve stare prima sennò playerFall mette jumping=false visto che tocca terra
         physicsWorld.playerFall();
+
         //physicsWorld.playerSideCollisions(); fa callback metodo move di player
 
         lightSource.draw(projection, view);
