@@ -19,7 +19,12 @@ add_executable(Minecraft main.cpp
         Sphere.cpp
         Sphere.h
         SkyBox.cpp
-        SkyBox.h)
+        SkyBox.h
+        Plane.cpp
+        Plane.h
+        PhysicsWorld.cpp
+        PhysicsWorld.h
+        frameTime.h)
 
 
 

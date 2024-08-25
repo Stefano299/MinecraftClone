@@ -142,6 +142,7 @@ const glm::vec3 &Player::getPos() const {
 }
 
 void Player::setPos(const glm::vec3 &newPos) {
+    pos = newPos;
     shader.useProgram();
     shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
 }
@@ -172,5 +173,13 @@ void Player::handleInput() {
 void Player::setLightPos(const glm::vec3 &pos) const {
     shader.useProgram();
     shader.changeUniformVec3("lightPos", pos.x, pos.y, pos.z);
+}
+
+bool Player::isFalling() const {
+    return falling;
+}
+
+void Player::setFalling(bool f) {
+    falling = f;
 }
 

@@ -5,11 +5,11 @@
 #include "Camera.h"
 #include <SFML/Window.hpp>
 
-Camera::Camera(const glm::vec3 &pos) {
+Camera::Camera(const glm::vec3 &pos, float speed, float sensitivity) {
     yaw = -90.0f;
     pitch = 0.0f;
-    speed = 0.2f;
-    sensitivity = 0.1f;
+    this->speed = speed;
+    this->sensitivity = sensitivity;
     lastX = 800;
     lastY = 600;
     cameraPos = pos;

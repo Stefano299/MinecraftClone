@@ -19,8 +19,11 @@
 #include"Player.h"
 #include"Sphere.h"
 #include"SkyBox.h"
+#include "PhysicsWorld.h"
+#include"frameTime.h"
 #include<cstdlib>
 
+long int frameTime = 0;
 
 void initWindow(sf::Window& window);
 void initOpenGL();
@@ -31,9 +34,11 @@ int main() {
 
     GrassCube::init();
     CubesContainer container;
-    container.genCube(glm::vec3(-10, -1.5, 10), 100, 50, 100);
+    CubesContainer secondContainer;
+    container.genCube(glm::vec3(-10, -1.5, 10), 20, 10, 20);
+    secondContainer.genCube(glm::vec3 (-4, -9, 10), 4, 1, 6);
 
-    Camera camera(glm::vec3(0.0, 0.0, 20.0));
+    Camera camera(glm::vec3(0.0, 0.0, 20.0), 0.3, 0.12);
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
@@ -41,14 +46,17 @@ int main() {
     Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
     Sphere lightSource(glm::vec3 (0, 10, 30), player);
     SkyBox skyBox;
+    PhysicsWorld physicsWorld(&player, &container);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    sf::Clock clock;
-    sf::Time time;
+    //sf::Clock clock;
+    //sf::Time time;
+
     while(window.isOpen()){
-        time = clock.getElapsedTime();
+        /*time = clock.getElapsedTime();
         std::cout << 1.f/time.asSeconds() << std::endl;
-        clock.restart();
+        clock.restart();*/
+        frameTime++;
         sf::Event event;
         while(window.pollEvent(event)){
             if(event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)){
@@ -66,10 +74,11 @@ int main() {
 
         camera.handleMovement();
         player.handleInput();
-
+        physicsWorld.playerFall();
 
         lightSource.draw(projection, view);
         container.drawCubes();
+        secondContainer.drawCubes();
         player.draw(projection, view, camera.getPos());
         skyBox.draw(projection, glm::mat4(glm::mat3(view)));
 
@@ -101,7 +110,7 @@ void initWindow(sf::Window& window){
     settings.attributeFlags = sf::ContextSettings::Core;
     settings.depthBits = 24;
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
-    //window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
     window.setActive();
     window.setMouseCursorVisible(false);
 }

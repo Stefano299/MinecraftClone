@@ -24,10 +24,12 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
                     cubesModel.push_back(cubeModel);
                     cubesType.push_back(1);
+                    topCubesPos.push_back(cubePos);
                 }
             }
         }
     }
+    //std::cout << cubes[0].getPos().y << " " << cubes[height*depth].getPos().y<< " " << cubes[1].getPos().y << std::endl;
 
     //setHidden(); //Una volta creati decido quali non vanno disegnati
     setInstances();
@@ -169,4 +171,9 @@ void CubesContainer::setInstances() {
     glVertexAttribPointer(6, 1, GL_INT, GL_FALSE, sizeof(int), (void*)0);
     glEnableVertexAttribArray(6);
     glVertexAttribDivisor(6, 1);*/
+}
+
+
+const std::vector<glm::vec3> &CubesContainer::getTopCubesPos() const {
+    return topCubesPos;
 }

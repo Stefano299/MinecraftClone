@@ -6,12 +6,14 @@
 #define MINECRAFT_CUBESCONTAINER_H
 
 #include"GrassCube.h"
+#include"Plane.h"
 #include<vector>
 
 class CubesContainer {
 private:
     unsigned int instancesVBO;
     std::vector<GrassCube> cubes;
+    std::vector<glm::vec3> topCubesPos; //I cubi che si trovano sopra
     std::vector<glm::mat4> cubesModel;
     std::vector<int> cubesType; //0=terrain, 1=grass
     bool isPresent(const glm::vec3& pos) const; //Per determinare se in una posizione si trova un cubo
@@ -23,6 +25,8 @@ public:
     CubesContainer() = default;
     void genCube(const glm::vec3& pos, int width, int height, int depth);
     void drawCubes() const;
+    const Plane& getPlane() const;
+    const std::vector<glm::vec3>& getTopCubesPos() const;
 };
 
 
