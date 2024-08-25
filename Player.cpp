@@ -3,6 +3,7 @@
 //
 
 #include "Player.h"
+#include"PhysicsWorld.h"
 
 Player::Player(const glm::vec3 &pos, float speed) {
     this->pos = pos;
@@ -149,25 +150,35 @@ void Player::setPos(const glm::vec3 &newPos) {
 
 void Player::handleInput() {
     glm::vec3 move(0.0); //Vettore spostamento
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
         move.z -= 1;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
         move.z += 1;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         move.x += 1;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         move.x -= 1;
     }
     //Solita cosa per impedire vada più veloce in diagonale
-    if(abs(move.x) + abs(move.z) == 2){  //Se normalizzo il vettore ed ha un solo componente dà componenti indefiniti
+    if (abs(move.x) + abs(move.z) ==
+        2) {  //Se normalizzo il vettore ed ha un solo componente dà componenti indefiniti
         move = glm::normalize(move);
     }
-    pos += move*speed;
-    shader.useProgram();
-    shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+    if(falling)
+        physicsWorld->playerSideCollisions(move*(speed/2));
+    else
+        physicsWorld->playerSideCollisions(move*speed);
+    if(!sideColliding) {
+        if (falling)
+            pos += move * (speed / 2);
+        else
+            pos += move * speed;
+        shader.useProgram();
+        shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+    }
 }
 
 void Player::setLightPos(const glm::vec3 &pos) const {
@@ -181,5 +192,21 @@ bool Player::isFalling() const {
 
 void Player::setFalling(bool f) {
     falling = f;
+}
+
+float Player::getSpeed() const {
+    return speed;
+}
+
+void Player::setSideColliding(bool c) {
+    sideColliding = c;
+}
+
+bool Player::isSideColliding() const {
+    return sideColliding;
+}
+
+void Player::setPhysicsWorld(PhysicsWorld *physicsWorld1) {
+    this->physicsWorld =physicsWorld1;
 }
 

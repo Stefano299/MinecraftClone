@@ -6,10 +6,10 @@
 #include"helper.h"
 
 void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int depth) {
-    int nCubes = width*height*depth;
+    /*int nCubes = width*height*depth;  non va bene se uno chiama il metodo più volte
     cubes.reserve(nCubes);
     cubesModel.reserve(nCubes);
-    cubesType.reserve(nCubes);
+    cubesType.reserve(nCubes);*/
     for(int i = 0; i < width; i++){
         for(int j = 0; j < height; j++){
             for(int k = 0; k < depth; k++){
@@ -25,6 +25,9 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                     cubesModel.push_back(cubeModel);
                     cubesType.push_back(1);
                     topCubesPos.push_back(cubePos);
+                }
+                if(i==0 || i==width-1 || k == 0 || k == depth-1){  //Cubi che si trovano ai lati
+                    sideCubesPos.push_back(cubePos);
                 }
             }
         }
@@ -177,3 +180,8 @@ void CubesContainer::setInstances() {
 const std::vector<glm::vec3> &CubesContainer::getTopCubesPos() const {
     return topCubesPos;
 }
+
+const std::vector<glm::vec3> &CubesContainer::getSideCubesPos() const {
+    return sideCubesPos;
+}
+

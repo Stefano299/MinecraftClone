@@ -14,12 +14,16 @@ private:
     Player* player;
     CubesContainer* cubesContainer;
     long int startFallingTime;
-    bool isCubeColliding(const glm::vec3& cubePos) const;  //Se player collide con il sopra di un cubo
+    bool isCubeColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;  //Se player collide con il sopra di un cubo
+    bool isCubeSideColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;
     bool isPlayerFalling() const; //Controlla se player sta cadendo dalla superficie
+    bool isPlayerCollidingSides(const glm::vec3& move) const;
+    float fallCoeff;
 
 public:
     PhysicsWorld(Player* player, CubesContainer* cubesContainer);
     void playerFall(); //Si occupa a far cadere il player
+    void playerSideCollisions(const glm::vec3& move) const;
 };
 
 

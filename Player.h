@@ -13,7 +13,7 @@
 #include"stb_image.h"
 #include"Shader.h"
 
-
+class PhysicsWorld;
 class Player {
 private:
     void createVertices();
@@ -26,10 +26,13 @@ private:
     unsigned int normalsVBO;
     glm::vec3 pos;
     Shader shader;
+    PhysicsWorld* physicsWorld;
     float speed;
     bool falling;
+    bool sideColliding;
 public:
     explicit Player(const glm::vec3& pos, float speed = 0.2);
+    void setPhysicsWorld( PhysicsWorld* physicsWorld1);
     void draw(const glm::mat4& projection, const glm::mat4& view, const glm::vec3& cameraPos) const;
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
@@ -37,6 +40,9 @@ public:
     void setLightPos(const glm::vec3& pos) const;
     void setFalling(bool f);
     bool isFalling() const;
+    float getSpeed() const;
+    void setSideColliding(bool c);
+    bool isSideColliding() const;
 };
 
 
