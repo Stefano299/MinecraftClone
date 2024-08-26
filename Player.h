@@ -25,12 +25,15 @@ private:
     unsigned int verticesVBO;
     unsigned int normalsVBO;
     glm::vec3 pos;
+    glm::mat4 model;
+    float yaw;
     Shader shader;
     PhysicsWorld* physicsWorld;
     float speed;
     bool falling;
     bool sideColliding;
     bool jumping;
+    bool firstPerson;
 public:
     explicit Player(const glm::vec3& pos, float speed = 0.2);
     void setPhysicsWorld( PhysicsWorld* physicsWorld1);
@@ -47,6 +50,9 @@ public:
     bool isJumping() const;
     void setJumping(bool j);
     void changeY(float dy);
+    void setYaw(float yaw);
+    void setFirstPerson(bool f);
+    float getYaw() const;
 };
 
 

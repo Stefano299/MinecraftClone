@@ -21,6 +21,7 @@
 #include"SkyBox.h"
 #include "PhysicsWorld.h"
 #include"frameTime.h"
+#include"FirstPersonController.h"
 #include<cstdlib>
 
 long int frameTime = 0;
@@ -43,14 +44,13 @@ int main() {
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
     Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
+    FirstPersonController firstPersonController(&camera, &player);
     Sphere lightSource(glm::vec3 (0, 10, 30), player);
     SkyBox skyBox;
     PhysicsWorld physicsWorld(&player, &container);
     player.setPhysicsWorld(&physicsWorld);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    //sf::Clock clock;
-    //sf::Time time;
 
     while(window.isOpen()){
         /*time = clock.getElapsedTime();
@@ -69,6 +69,7 @@ int main() {
             else if(event.type == sf::Event::MouseMoved){
                 camera.handleRotation(event);
             }
+            firstPersonController.getInput(event);
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -81,6 +82,7 @@ int main() {
 
         lightSource.draw(projection, view);
         container.drawCubes();
+        firstPersonController.update();
         player.draw(projection, view, camera.getPos());
         skyBox.draw(projection, glm::mat4(glm::mat3(view)));
 

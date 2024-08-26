@@ -24,7 +24,9 @@ add_executable(Minecraft main.cpp
         Plane.h
         PhysicsWorld.cpp
         PhysicsWorld.h
-        frameTime.h)
+        frameTime.h
+        FirstPersonController.cpp
+        FirstPersonController.h)
 
 
 

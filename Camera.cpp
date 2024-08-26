@@ -17,19 +17,19 @@ Camera::Camera(const glm::vec3 &pos, float speed, float sensitivity) {
 }
 
 void Camera::handleMovement() {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         cameraPos += speed*cameraFront;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         cameraPos -= speed*cameraFront;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         cameraPos -= glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)))*speed;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
         cameraPos += glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)))*speed;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
         glm::vec3 right = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0, 1.0, 0.0)));
         cameraPos += glm::normalize(glm::cross(right, cameraFront))*speed;
     }
@@ -75,6 +75,14 @@ void Camera::reset(sf::Window& window) {
     sf::Mouse::setPosition(sf::Vector2i (800, 600), window);
     lastX = 800;
     lastY = 600;
+}
+
+void Camera::setPos(const glm::vec3 &newPos) {
+    cameraPos = newPos;
+}
+
+float Camera::getYaw() const {
+    return yaw;
 }
 
 

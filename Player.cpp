@@ -8,6 +8,8 @@
 Player::Player(const glm::vec3 &pos, float speed) {
     this->pos = pos;
     this->speed = speed;
+    yaw = 0.0f;
+    firstPerson = false;
     createVertices(); //Creo i vertici per un cilindro
     calculateNormals();
     createShader();
@@ -23,8 +25,9 @@ Player::Player(const glm::vec3 &pos, float speed) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
     glEnableVertexAttribArray(1);
+    model = glm::translate(glm::mat4(1.0), pos);
     shader.useProgram();
-    shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+    shader.changeUniform4M("model",model);
 }
 
 void Player::createVertices() {
@@ -127,9 +130,10 @@ void Player::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm:
     shader.changeUniform4M("view", view);
     shader.changeUniform4M("projection", projection);
     shader.changeUniformVec3("cameraPos", cameraPos.x, cameraPos.y, cameraPos.z);
-
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, (216+324/3)*2);
+    if(!firstPerson) { //Sennò se sono in prima persona mi vedo il cilindro addosso
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, (216 + 324 / 3) * 2);
+    }
 }
 
 void Player::createShader() {
@@ -144,25 +148,27 @@ const glm::vec3 &Player::getPos() const {
 
 void Player::setPos(const glm::vec3 &newPos) {
     pos = newPos;
+    model = glm::translate(glm::mat4(1.0), pos);
     shader.useProgram();
-    shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+    shader.changeUniform4M("model", model);
 }
 
 void Player::handleInput() {
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0), glm::radians(-yaw), glm::vec3(0.0, 1.0, 0.0));
     glm::vec3 move(0.0); //Vettore spostamento
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         move.z -= 1;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         move.z += 1;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         move.x += 1;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         move.x -= 1;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
         if(!jumping && !falling) jumping = true;
     }
     //Solita cosa per impedire vada più veloce in diagonale
@@ -170,6 +176,8 @@ void Player::handleInput() {
         2) {  //Se normalizzo il vettore ed ha un solo componente dà componenti indefiniti
         move = glm::normalize(move);
     }
+    move = glm::vec3(rotationMatrix*glm::vec4(move,1.0));
+
     if(falling)
         physicsWorld->playerSideCollisions(move*(speed/2));
     else
@@ -179,8 +187,10 @@ void Player::handleInput() {
             pos += move * (speed / 2);
         else
             pos += move * speed;
+        model = glm::translate(glm::mat4(1.0), pos);
+        model = glm::rotate(model, glm::radians(-yaw), glm::vec3(0.0, 1.0, 0.0));
         shader.useProgram();
-        shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+        shader.changeUniform4M("model", model);
     }
 }
 
@@ -215,8 +225,9 @@ void Player::setPhysicsWorld(PhysicsWorld *physicsWorld1) {
 
 void Player::changeY(float dy) {
     pos+= glm::vec3(0.0, dy, 0.0);
+    model = glm::translate(glm::mat4(1.0), pos);
     shader.useProgram();
-    shader.changeUniform4M("model", glm::translate(glm::mat4(1.0), pos));
+    shader.changeUniform4M("model", model);
 }
 
 bool Player::isJumping() const {
@@ -225,5 +236,17 @@ bool Player::isJumping() const {
 
 void Player::setJumping(bool j) {
     jumping = j;
+}
+
+void Player::setYaw(float yaw) {
+    this->yaw = yaw;
+}
+
+void Player::setFirstPerson(bool f) {
+    firstPerson = f;
+}
+
+float Player::getYaw() const {
+    return yaw;
 }
 

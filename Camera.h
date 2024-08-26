@@ -29,6 +29,8 @@ public:
     void reset(sf::Window& window);
     const glm::vec3& getFront() const;
     const glm::vec3& getPos() const;;
+    void setPos(const glm::vec3& newPos);
+    float getYaw() const;
 };
 
 
