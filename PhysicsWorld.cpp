@@ -88,3 +88,12 @@ void PhysicsWorld::playerJump() const {
         player->changeY(0.14);
     }
 }
+
+void PhysicsWorld::rayCastCheck(const glm::vec3& camDirection){
+    for(const auto& it: cubesContainer->getTopCubesPos()){
+        if(rayCast.checkCube(player->getPos()+glm::vec3(0.0, 1.0, 0.0), camDirection, it)){
+            std::cout << it.x << " " << it.y << " " <<it.z << std::endl;
+            break;
+        }
+    }
+}

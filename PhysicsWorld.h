@@ -8,12 +8,14 @@
 #include"CubesContainer.h"
 #include"frameTime.h"
 #include"Player.h"
+#include"RayCast.h"
 
 class PhysicsWorld {
 private:
     Player* player;
     CubesContainer* cubesContainer;
     long int startFallingTime;
+    RayCast rayCast;
     bool isCubeColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;  //Se player collide con il sopra di un cubo
     bool isCubeSideColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;
     bool isPlayerFalling(glm::vec3& collidingCubePos) const; //Controlla se player sta cadendo dalla superficie
@@ -25,6 +27,7 @@ public:
     void playerFall(); //Si occupa a far cadere il player
     void playerSideCollisions(const glm::vec3& move) const;
     void playerJump() const;
+    void rayCastCheck(const glm::vec3& camDirection);
 };
 
 

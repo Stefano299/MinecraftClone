@@ -4,14 +4,15 @@
 
 #include "Camera.h"
 #include <SFML/Window.hpp>
+#include"constants.h"
 
 Camera::Camera(const glm::vec3 &pos, float speed, float sensitivity) {
     yaw = -90.0f;
     pitch = 0.0f;
     this->speed = speed;
     this->sensitivity = sensitivity;
-    lastX = 800;
-    lastY = 600;
+    lastX = SCREEN_WIDTH/2;
+    lastY = SCREEN_HEIGHT/2;
     cameraPos = pos;
     cameraFront = glm::vec3(0.0, 0.0, -1.0);
 }
@@ -72,9 +73,9 @@ void Camera::handleRotation(const sf::Event &event) {
 }
 
 void Camera::reset(sf::Window& window) {
-    sf::Mouse::setPosition(sf::Vector2i (800, 600), window);
-    lastX = 800;
-    lastY = 600;
+    sf::Mouse::setPosition(sf::Vector2i (SCREEN_WIDTH/2, SCREEN_HEIGHT/2), window);
+    lastX = SCREEN_WIDTH/2;
+    lastY = SCREEN_HEIGHT/2;
 }
 
 void Camera::setPos(const glm::vec3 &newPos) {

@@ -37,6 +37,9 @@ int main() {
     CubesContainer container;
     container.genCube(glm::vec3(-10, -1.5, 10), 20, 10, 20);
     container.genCube(glm::vec3 (-16, -9, 10), 4, 1, 15);
+    container.genCube(glm::vec3(-6, -0.5, -12), 5, 1, 3);
+    container.genCube(glm::vec3(-6, 1.5, -15), 5, 1, 3);
+
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0), 0.3, 0.12);
 
@@ -75,6 +78,7 @@ int main() {
 
         camera.handleMovement();
         player.handleInput();  //Deve stare prima per jumping
+        physicsWorld.rayCastCheck(camera.getFront());
         physicsWorld.playerJump();//Deve stare prima sennò playerFall mette jumping=false visto che tocca terra
         physicsWorld.playerFall();
 
@@ -117,7 +121,7 @@ void initWindow(sf::Window& window){
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
     window.setFramerateLimit(60);
     window.setActive();
-    window.setMouseCursorVisible(false);
+    window.setMouseCursorVisible(true);
 }
 
 void initOpenGL(){

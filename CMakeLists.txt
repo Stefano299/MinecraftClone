@@ -26,7 +26,9 @@ add_executable(Minecraft main.cpp
         PhysicsWorld.h
         frameTime.h
         FirstPersonController.cpp
-        FirstPersonController.h)
+        FirstPersonController.h
+        RayCast.cpp
+        RayCast.h)
 
 
 
