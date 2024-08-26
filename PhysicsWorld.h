@@ -9,6 +9,7 @@
 #include"frameTime.h"
 #include"Player.h"
 #include"RayCast.h"
+#include"CubeBorder.h"
 
 class PhysicsWorld {
 private:
@@ -16,11 +17,13 @@ private:
     CubesContainer* cubesContainer;
     long int startFallingTime;
     RayCast rayCast;
+    CubeBorder cubeBorder;
     bool isCubeColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;  //Se player collide con il sopra di un cubo
     bool isCubeSideColliding(const glm::vec3& cubePos, const glm::vec3& playerPos) const;
     bool isPlayerFalling(glm::vec3& collidingCubePos) const; //Controlla se player sta cadendo dalla superficie
     bool isPlayerCollidingSides(const glm::vec3& move) const;
     float fallCoeff;
+    bool rayCastFound;
 
 public:
     PhysicsWorld(Player* player, CubesContainer* cubesContainer);
@@ -28,6 +31,7 @@ public:
     void playerSideCollisions(const glm::vec3& move) const;
     void playerJump() const;
     void rayCastCheck(const glm::vec3& camDirection);
+    void drawBorderCube(const glm::mat4& projection, const glm::mat4& view) const;
 };
 
 

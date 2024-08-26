@@ -90,10 +90,31 @@ void PhysicsWorld::playerJump() const {
 }
 
 void PhysicsWorld::rayCastCheck(const glm::vec3& camDirection){
+    bool found = false;
+    std::vector<int> raySteps;
+    std::vector<std::pair<glm::vec3, float>> distances;
     for(const auto& it: cubesContainer->getTopCubesPos()){
         if(rayCast.checkCube(player->getPos()+glm::vec3(0.0, 1.0, 0.0), camDirection, it)){
-            std::cout << it.x << " " << it.y << " " <<it.z << std::endl;
-            break;
+            distances.push_back({it, glm::distance(player->getPos()+glm::vec3(0.0, 1.0, 0.0), it)});
+            found = true;
         }
+    }
+    //TODO REFACTORING, CODICE PER ESSERE SICURI VENGA PRESO IL BLOCCO PIU' VICINO DI QUELLI CHE COLLIDONO
+    std::pair<glm::vec3, float> min = {glm::vec3(0.0), 100.f};
+    for(auto it:distances){
+        if(it.second < min.second)
+            min = it;
+    }
+    if(found) {
+        cubeBorder.setPos(min.first);
+        rayCastFound = true;
+    }
+    else
+        rayCastFound = false;
+}
+
+void PhysicsWorld::drawBorderCube(const glm::mat4 &projection, const glm::mat4 &view) const {
+    if(rayCastFound){
+        cubeBorder.draw(projection, view);
     }
 }

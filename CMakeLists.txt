@@ -28,7 +28,9 @@ add_executable(Minecraft main.cpp
         FirstPersonController.cpp
         FirstPersonController.h
         RayCast.cpp
-        RayCast.h)
+        RayCast.h
+        CubeBorder.cpp
+        CubeBorder.h)
 
 
 

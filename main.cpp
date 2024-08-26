@@ -86,6 +86,7 @@ int main() {
 
         lightSource.draw(projection, view);
         container.drawCubes();
+        physicsWorld.drawBorderCube(projection, view);
         firstPersonController.update();
         player.draw(projection, view, camera.getPos());
         skyBox.draw(projection, glm::mat4(glm::mat3(view)));
@@ -129,9 +130,9 @@ void initOpenGL(){
     if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(sf::Context::getFunction))){
         std::cerr << "Errore nel caricamento di glad" << std::endl;
     }
-
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2, 0.3, 0.3, 1.0);
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glEnable(GL_MULTISAMPLE);
+    glLineWidth(5.0f); //Per il disegno del bordo dei cubi
 }

@@ -20,6 +20,7 @@ private:
 public:
     RayCast();
     bool checkCube(const glm::vec3 &startPos, const glm::vec3 &direction, const glm::vec3& cubePos);
+    int getStep() const;
 };
 
 
