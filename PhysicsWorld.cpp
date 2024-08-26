@@ -144,7 +144,11 @@ void PhysicsWorld::cubeInteractions(sf::Event& event) {
             glm::vec3 newCubePos = cubeBorder.getPos()+posOffeset;
             if(!isCubeColliding(newCubePos, player->getPos())) //Sennè il player si bugga dentro il blocco aggiunto
                 cubesContainer->addCube(newCubePos, Type::Grass);
-
+        }
+    }
+    else if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Right){
+        if(rayCastFound){
+            cubesContainer->removeCube(cubeBorder.getPos());
         }
     }
 }

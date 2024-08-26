@@ -22,6 +22,8 @@ private:
     int nSurroundingCubes(const GrassCube& cube) const;//Ritorna il numero di cubi adiacenti
     void setHidden(); //Passa in rassegna i cubi e imposta quali devono essere nascosti
     void setInstances();
+    void setTypes(); //Passa in rassegna tutti i cubi e mette i tipi nel vettore cubesTypes
+    void addSurroundingBlocksToVectors(const glm::vec3& pos);
 public:
     CubesContainer() = default;
     void genCube(const glm::vec3& pos, int width, int height, int depth);
@@ -29,6 +31,7 @@ public:
     void drawCubes() const;
     const std::vector<glm::vec3>& getTopCubesPos() const;
     const std::vector<glm::vec3>& getSideCubesPos() const;
+    void removeCube(const glm::vec3& pos);
 };
 
 

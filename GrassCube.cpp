@@ -181,3 +181,11 @@ unsigned int GrassCube::getVAO() {
 const glm::mat4& GrassCube::getModel() const {
     return model;
 }
+
+Type GrassCube::getType() const {
+    return type;
+}
+
+bool GrassCube::operator==(const GrassCube &right) const {
+    return(pos == right.pos);
+}

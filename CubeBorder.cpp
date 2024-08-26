@@ -71,7 +71,7 @@ void CubeBorder::draw(const glm::mat4& projection, const glm::mat4& view) const 
     shader.changeUniform4M("projection", projection);
     shader.changeUniform4M("view", view);
     glEnable(GL_POLYGON_OFFSET_LINE);  //Voglio che la linea venga messa unpoì avanti nel depth buffer o non viene disegnata
-    glPolygonOffset(-2.f, -2.0f);
+    glPolygonOffset(-5.f, -4.0f);
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 24);
     glDisable(GL_POLYGON_OFFSET_LINE);

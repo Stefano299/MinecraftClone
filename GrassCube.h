@@ -39,9 +39,11 @@ public:
     const glm::vec3& getPos() const;
     void setPos(const glm::vec3& newPos);
     bool operator!=(const GrassCube& right) const;
+    bool operator==(const GrassCube& right) const;
     void setHidden(bool h);
     bool isHidden() const;
     const glm::mat4& getModel() const;
+    Type getType() const;
 };
 
 

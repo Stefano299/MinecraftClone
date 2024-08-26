@@ -5,6 +5,8 @@
 #ifndef OPENGL_HELPER_H
 #define OPENGL_HELPER_H
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include<iostream>
 #include <string>
 #include <fstream>
@@ -13,5 +15,6 @@
 std::string loadShader(const char* path);
 int probability(float prob); //Ritorna 1 con una probabilità = prob (massimo una cifra decimale)
 int getSign(int x);
+void showVectorInfo(const glm::vec3& vec);
 
 #endif //OPENGL_HELPER_H

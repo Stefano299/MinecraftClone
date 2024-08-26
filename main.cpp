@@ -48,7 +48,7 @@ int main() {
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
-    Player player(glm::vec3(0.0, 0.0, 0.0), 0.14);
+    Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
     FirstPersonController firstPersonController(&camera, &player);
     Sphere lightSource(glm::vec3 (0, 10, 30), player);
     SkyBox skyBox;

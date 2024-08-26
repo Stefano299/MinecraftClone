@@ -2,19 +2,20 @@
 // Created by stefano on 8/21/24.
 //
 
+#include<algorithm>
+
 #include "CubesContainer.h"
 #include"helper.h"
 
 void CubesContainer::addCube(const glm::vec3 &pos, Type type) {
     glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), pos);
     if(type == Type::Grass){
-        cubes.push_back(GrassCube(pos, Type::Terrain));
-        cubesType.push_back(1);
+        cubes.push_back(GrassCube(pos, Type::Grass));
     }
     else if(type == Type::Terrain){
         cubes.push_back(GrassCube(pos, Type::Terrain));
-        cubesType.push_back(0);
     }
+    setTypes();
     cubesModel.push_back(cubeModel);
     topCubesPos.push_back(pos);
     sideCubesPos.push_back(pos);
@@ -34,13 +35,11 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                 if(j > 0) {
                     cubes.push_back(GrassCube(cubePos, Type::Terrain));
                     cubesModel.push_back(cubeModel);
-                    cubesType.push_back(0);
                 }
                 else if(j == 0){
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
                     cubesModel.push_back(cubeModel);
                     topCubesPos.push_back(cubePos);
-                    cubesType.push_back(1);
                 }
                 if(i==0 || i==width-1 || k == 0 || k == depth-1){  //Cubi che si trovano ai lati
                     sideCubesPos.push_back(cubePos);
@@ -48,6 +47,7 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
             }
         }
     }
+    setTypes();
     //std::cout << cubes[0].getPos().y << " " << cubes[height*depth].getPos().y<< " " << cubes[1].getPos().y << std::endl;
 
     //setHidden(); //Una volta creati decido quali non vanno disegnati
@@ -199,6 +199,57 @@ const std::vector<glm::vec3> &CubesContainer::getTopCubesPos() const {
 
 const std::vector<glm::vec3> &CubesContainer::getSideCubesPos() const {
     return sideCubesPos;
+}
+
+void CubesContainer::removeCube(const glm::vec3 &pos){
+    auto itTop = std::find(topCubesPos.begin(), topCubesPos.end(), pos);
+    auto itSide = std::find(sideCubesPos.begin(), sideCubesPos.end(), pos);
+
+    if(itTop != topCubesPos.end()){
+        topCubesPos.erase(itTop);
+    }
+    if (itSide != sideCubesPos.end()){
+        sideCubesPos.erase(itSide);
+    }
+    GrassCube cube(pos, Type::Grass); //Per l'ugualinza; due blocchi sono uguali se hanno stessa pos
+    auto itCube = std::find(cubes.begin(), cubes.end(), cube);
+    cubes.erase(itCube);
+    auto itModel = std::find(cubesModel.begin(), cubesModel.end(), cube.getModel());
+    cubesModel.erase(itModel);
+    addSurroundingBlocksToVectors(pos);
+    setTypes();
+    setInstances();
+}
+
+void CubesContainer::setTypes() {
+    cubesType.clear();
+    for(const auto& it: cubes){
+        if(it.getType() == Type::Grass)
+            cubesType.push_back(1);
+        else if(it.getType() == Type::Terrain)
+            cubesType.push_back(0);
+    }
+}
+
+void CubesContainer::addSurroundingBlocksToVectors(const glm::vec3 &pos) {
+    //Le posizioni dei blocchi attorno al blocco in pos
+    glm::vec3 surroundingPos[6] = {glm::vec3(-1.0, 0.0, 0.0)+pos,
+                                   glm::vec3(1.0, 0.0, 0.0)+pos,
+                                   glm::vec3(0.0, 1.0, 0.0)+pos,
+                                   glm::vec3(0.0, -1.0, 0.0)+pos,
+                                   glm::vec3(0.0, 0.0, 1.0)+pos,
+                                   glm::vec3(0.0, 0.0, -1.0)+pos};
+    for(int i = 0; i < 6; i++){
+        glm::vec3 surroundingCubePos = surroundingPos[i];
+        if(isPresent(surroundingCubePos)){
+            //Controllo non siano già presenti  o vengono aggiunti più volte
+            auto itTop = std::find(topCubesPos.begin(), topCubesPos.end(), surroundingCubePos);
+            auto itSide = std::find(sideCubesPos.begin(), sideCubesPos.end(), surroundingCubePos);
+            if(itTop == topCubesPos.end()) topCubesPos.push_back(surroundingCubePos);
+            if(itSide == sideCubesPos.end()) sideCubesPos.push_back(surroundingCubePos);
+            showVectorInfo(surroundingCubePos);
+        }
+    }
 }
 
 

@@ -49,3 +49,7 @@ int getSign(int x){
     else
         return 0;
 }
+
+void showVectorInfo(const glm::vec3& vec){
+    std::cout << "x: " << vec.x << " y: " << vec.y << " z: " << vec.z << std::endl;
+}
