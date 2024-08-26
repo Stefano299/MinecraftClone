@@ -30,7 +30,9 @@ add_executable(Minecraft main.cpp
         RayCast.cpp
         RayCast.h
         CubeBorder.cpp
-        CubeBorder.h)
+        CubeBorder.h
+        CrossAir.cpp
+        CrossAir.h)
 
 
 

@@ -101,7 +101,7 @@ void PhysicsWorld::rayCastCheck(const glm::vec3& camDirection){
     }
     //TODO REFACTORING, CODICE PER ESSERE SICURI VENGA PRESO IL BLOCCO PIU' VICINO DI QUELLI CHE COLLIDONO
     std::pair<glm::vec3, float> min = {glm::vec3(0.0), 100.f};
-    for(auto it:distances){
+    for(const auto& it:distances){
         if(it.second < min.second)
             min = it;
     }

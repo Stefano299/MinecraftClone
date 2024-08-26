@@ -10,7 +10,7 @@
 FirstPersonController::FirstPersonController(Camera *camera, Player *player) {
     this->camera = camera;
     this->player = player;
-    active = false;
+    active = true;
 }
 
 void FirstPersonController::update() const {

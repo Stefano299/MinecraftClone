@@ -22,12 +22,14 @@
 #include "PhysicsWorld.h"
 #include"frameTime.h"
 #include"FirstPersonController.h"
+#include"CrossAir.h"
 #include<cstdlib>
 
 long int frameTime = 0;
 
 void initWindow(sf::Window& window);
 void initOpenGL();
+
 int main() {
     sf::Window window;
     initWindow(window);
@@ -46,14 +48,17 @@ int main() {
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH/SCREEN_HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
-    Player player(glm::vec3(0.0, 0.0, 0.0), 0.1);
+    Player player(glm::vec3(0.0, 0.0, 0.0), 0.14);
     FirstPersonController firstPersonController(&camera, &player);
     Sphere lightSource(glm::vec3 (0, 10, 30), player);
     SkyBox skyBox;
     PhysicsWorld physicsWorld(&player, &container);
     player.setPhysicsWorld(&physicsWorld);
+    CrossAir crossAir;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    //sf::Clock clock;
+    //sf::Time time;
 
     while(window.isOpen()){
         /*time = clock.getElapsedTime();
@@ -90,7 +95,7 @@ int main() {
         firstPersonController.update();
         player.draw(projection, view, camera.getPos());
         skyBox.draw(projection, glm::mat4(glm::mat3(view)));
-
+        crossAir.draw();
 
         view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
 
@@ -122,7 +127,7 @@ void initWindow(sf::Window& window){
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
     window.setFramerateLimit(60);
     window.setActive();
-    window.setMouseCursorVisible(true);
+    window.setMouseCursorVisible(false);
 }
 
 void initOpenGL(){
