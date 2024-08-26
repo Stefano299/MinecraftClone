@@ -40,7 +40,7 @@ int main() {
     container.genCube(glm::vec3(-10, -1.5, 10), 20, 10, 20);
     container.genCube(glm::vec3 (-16, -9, 10), 4, 1, 15);
     container.genCube(glm::vec3(-6, -0.5, -12), 5, 1, 3);
-    container.genCube(glm::vec3(-6, 1.5, -15), 5, 1, 3);
+    container.genCube(glm::vec3(-6, 1.5, -15), 5, 2, 3);
 
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0), 0.3, 0.12);
@@ -78,6 +78,7 @@ int main() {
                 camera.handleRotation(event);
             }
             firstPersonController.getInput(event);
+            physicsWorld.cubeInteractions(event);
         }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -97,7 +98,7 @@ int main() {
         skyBox.draw(projection, glm::mat4(glm::mat3(view)));
         crossAir.draw();
 
-        view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));
+        view = glm::lookAt(camera.getPos(), camera.getPos() + camera.getFront(), glm::vec3(0.0, 1.0, 0.0));  //TODO mettere view nella classe camera e fare getView
 
         GrassCube::updateMatrix(view, projection);
 

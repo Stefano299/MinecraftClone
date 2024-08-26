@@ -12,7 +12,7 @@
 #include"stb_image.h"
 #include"Shader.h"
 
-enum Type{
+enum class Type{
     Terrain,
     Grass
 };

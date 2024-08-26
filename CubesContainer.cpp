@@ -5,6 +5,22 @@
 #include "CubesContainer.h"
 #include"helper.h"
 
+void CubesContainer::addCube(const glm::vec3 &pos, Type type) {
+    glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), pos);
+    if(type == Type::Grass){
+        cubes.push_back(GrassCube(pos, Type::Terrain));
+        cubesType.push_back(1);
+    }
+    else if(type == Type::Terrain){
+        cubes.push_back(GrassCube(pos, Type::Terrain));
+        cubesType.push_back(0);
+    }
+    cubesModel.push_back(cubeModel);
+    topCubesPos.push_back(pos);
+    sideCubesPos.push_back(pos);
+    setInstances();
+}
+
 void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int depth) {
     /*int nCubes = width*height*depth;  non va bene se uno chiama il metodo più volte
     cubes.reserve(nCubes);
@@ -23,8 +39,8 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                 else if(j == 0){
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
                     cubesModel.push_back(cubeModel);
-                    cubesType.push_back(1);
                     topCubesPos.push_back(cubePos);
+                    cubesType.push_back(1);
                 }
                 if(i==0 || i==width-1 || k == 0 || k == depth-1){  //Cubi che si trovano ai lati
                     sideCubesPos.push_back(cubePos);
@@ -184,4 +200,6 @@ const std::vector<glm::vec3> &CubesContainer::getTopCubesPos() const {
 const std::vector<glm::vec3> &CubesContainer::getSideCubesPos() const {
     return sideCubesPos;
 }
+
+
 

@@ -25,6 +25,7 @@ private:
 public:
     CubesContainer() = default;
     void genCube(const glm::vec3& pos, int width, int height, int depth);
+    void addCube(const glm::vec3& pos, Type type);
     void drawCubes() const;
     const std::vector<glm::vec3>& getTopCubesPos() const;
     const std::vector<glm::vec3>& getSideCubesPos() const;

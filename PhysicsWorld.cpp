@@ -28,7 +28,7 @@ bool PhysicsWorld::isCubeColliding(const glm::vec3& cubePos, const glm::vec3& pl
     float cubeTopY = cubePos.y+0.5f;
     float cubeBottomY = cubePos.y-0.5f;
     bool isCollidingXZ = (abs(playerPos.z - cubePos.z) <= 1 && abs(playerPos.x - cubePos.x) <= 1); //Ritorna verso  se il centro è tra i confini dl blocco (x e z)
-    bool isCollidingY = (bottomPlayerY <= cubeTopY && cubeBottomY - bottomPlayerY <= 2);  //(Controlla collisione nella y)
+    bool isCollidingY = (abs(playerPos.y-cubePos.y)<=1.5);  //(Controlla collisione nella y)
     return(isCollidingXZ && isCollidingY);
 }
 
@@ -70,7 +70,12 @@ bool PhysicsWorld::isPlayerCollidingSides(const glm::vec3& move) const {
 bool PhysicsWorld::isCubeSideColliding(const glm::vec3 &cubePos, const glm::vec3 &playerPos) const {
     bool isCollidingXZ = (abs(playerPos.z - cubePos.z) < 1 && abs(playerPos.x - cubePos.x) < 1); //Ritorna verso  se il centro è tra i confini dl blocco (x e z)
     //Il player appare più alto... devorebbe quindi non considerare le collisioni con pavimento
-    bool isCollidingY = (abs(playerPos.y-cubePos.y) < 1.5);  //(Controlla collisione nella y)
+    bool isCollidingY = false;
+    if(playerPos.y>cubePos.y)
+        isCollidingY = (abs(playerPos.y-cubePos.y) < 1.5);  //(Controlla collisione nella y)
+    else
+        //Sennò la camera si bugga nei blocchi sopra il player...
+        isCollidingY = (abs(playerPos.y-cubePos.y) < 2);  //(Controlla collisione nella y)
     return(isCollidingXZ && isCollidingY);
 }
 
@@ -118,3 +123,29 @@ void PhysicsWorld::drawBorderCube(const glm::mat4 &projection, const glm::mat4 &
         cubeBorder.draw(projection, view);
     }
 }
+
+void PhysicsWorld::cubeInteractions(sf::Event& event) {
+    if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Left){
+        if(rayCastFound){
+            Face selectedFace = rayCast.calcSelectedFace(cubeBorder.getPos());
+            glm::vec3 posOffeset;
+            if(selectedFace == Face::front)
+                posOffeset = glm::vec3(0.0, 0.0, 1.0);
+            if(selectedFace == Face::back)
+                posOffeset = glm::vec3(0.0, 0.0, -1.0);
+            if(selectedFace == Face::right)
+                posOffeset = glm::vec3(1.0, 0.0, 0.0);
+            if(selectedFace == Face::left)
+                posOffeset = glm::vec3(-1.0, 0.0, 0.0);
+            if(selectedFace == Face::top)
+                posOffeset = glm::vec3(0.0, 1.0 ,0.0);
+            if(selectedFace == Face::bottom)
+                posOffeset = glm::vec3(0.0, -1.0, 0.0);
+            glm::vec3 newCubePos = cubeBorder.getPos()+posOffeset;
+            if(!isCubeColliding(newCubePos, player->getPos())) //Sennè il player si bugga dentro il blocco aggiunto
+                cubesContainer->addCube(newCubePos, Type::Grass);
+
+        }
+    }
+}
+

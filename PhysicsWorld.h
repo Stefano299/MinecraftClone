@@ -32,6 +32,7 @@ public:
     void playerJump() const;
     void rayCastCheck(const glm::vec3& camDirection);
     void drawBorderCube(const glm::mat4& projection, const glm::mat4& view) const;
+    void cubeInteractions(sf::Event& event);
 };
 
 
