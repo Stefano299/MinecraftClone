@@ -14,18 +14,7 @@ Player::Player(const glm::vec3 &pos, float speed) {
     createVertices(); //Creo i vertici per un cilindro
     calculateNormals();
     createShader();
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &verticesVBO);
-    glGenBuffers(1, &normalsVBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, verticesVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
-    glEnableVertexAttribArray(1);
+    initBuffers();
     model = glm::translate(glm::mat4(1.0), pos);
     shader.useProgram();
     shader.changeUniform4M("model",model);
@@ -249,5 +238,20 @@ void Player::setFirstPerson(bool f) {
 
 float Player::getYaw() const {
     return yaw;
+}
+
+void Player::initBuffers() {
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &verticesVBO);
+    glGenBuffers(1, &normalsVBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, verticesVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
+    glEnableVertexAttribArray(1);
 }
 

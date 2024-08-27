@@ -19,6 +19,7 @@ private:
     void createVertices();
     void calculateNormals();
     void createShader();
+    void initBuffers();
     float vertices[1944];
     float normals[1944]; //Per ogni vertici dò il vettore normale
     unsigned int VAO;

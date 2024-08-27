@@ -3,6 +3,7 @@
 //
 
 #include "../headers/CrossAir.h"
+#include "../headers/constants.h"
 
 float vertexData[36] = {-1.0f, -0.2f, 0.0f,
                   1.0f, -0.2f, 0.0f,
@@ -63,8 +64,10 @@ void CrossAir::draw(const glm::mat4& projection) const {
 }
 
 void CrossAir::setScale() {
+    int screenTotalSize = SCREEN_HEIGHT+SCREEN_WIDTH;  //Per mantenerlo piccolo anche a grandi risoluzioni
+    double scaleFactor = (0.001/4000)*screenTotalSize;
     model = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, -0.1));
-    model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+    model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     shader.useProgram();
     shader.changeUniform4M("model", model);
 }

@@ -7,7 +7,7 @@
 #include "../headers/Player.h"
 
 bool PhysicsWorld::isPlayerFalling(glm::vec3& collidingCubePos) const {
-    for(const auto& it: cubesContainer->getTopCubesPos()){
+    for(const auto& it: cubesContainer->getVisibleCubesPos()){
         glm::vec3 futurePlayerPos = player->getPos()+glm::vec3(0.0, fallCoeff, 0.0);
         if(isCubeColliding(it, futurePlayerPos)){
             collidingCubePos = it;
@@ -57,7 +57,7 @@ void PhysicsWorld::playerFall() {
 }
 
 bool PhysicsWorld::isPlayerCollidingSides(const glm::vec3& move) const {
-    for(const auto& it: cubesContainer->getSideCubesPos()){
+    for(const auto& it: cubesContainer->getVisibleCubesPos()){
         glm::vec3 futurePlayerPos = player->getPos()+glm::vec3(move.x, fallCoeff, move.z); //XZ devono considerare il movimento laterale
         if(isCubeSideColliding(it, futurePlayerPos)){
             return true;
@@ -89,7 +89,7 @@ void PhysicsWorld::playerSideCollisions(const glm::vec3& move) const{
 
 void PhysicsWorld::playerJump() const {
     if(player->isJumping()){
-        player->changeY(0.14);
+        player->changeY(0.1);
     }
 }
 
@@ -97,8 +97,7 @@ void PhysicsWorld::rayCastCheck(const glm::vec3& camDirection){
     bool found = false;
     std::vector<int> raySteps;
     std::vector<std::pair<glm::vec3, float>> distances;
-    for(const auto& it: cubesContainer->getTopCubesPos()){
-        //TODO controlla solo i top... va bene?
+    for(const auto& it: cubesContainer->getVisibleCubesPos()){
         if(isNear(player->getPos(), it, 6)) {  //Se non è vicino manco lo controllo
             if (rayCast.checkCube(player->getPos() + glm::vec3(0.0, 1.0, 0.0), camDirection, it)) {
                 distances.push_back({it, glm::distance(player->getPos() + glm::vec3(0.0, 1.0, 0.0), it)});

@@ -42,9 +42,7 @@ int main() {
     sf::Window window;
     initWindow(window);
     initOpenGL();
-    //TODO fare un solo vettore per cubecontainer
 
-    GrassCube::init();
     CubesContainer container;
     container.genCube(glm::vec3(-10, -1.5, 50), 100, 7, 100);
 
@@ -82,9 +80,6 @@ void update(sf::Window &window, const CubesContainer &container, Camera &camera,
     player.handleInput();  //Deve stare prima per jumping
     physicsWorld.rayCastCheck(camera.getFront());
     physicsWorld.playerJump();//Deve stare prima sennò playerFall mette jumping=false visto che tocca terra
-    physicsWorld.playerFall();
-    //physicsWorld.playerSideCollisions(); fa callback metodo move di player
-
     physicsWorld.playerFall();
 
     lightSource.draw(projection, view);

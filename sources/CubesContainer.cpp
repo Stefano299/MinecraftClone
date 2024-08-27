@@ -7,6 +7,10 @@
 #include "../headers/CubesContainer.h"
 #include"../headers/helper.h"
 
+CubesContainer::CubesContainer() {
+    GrassCube::init();
+}
+
 void CubesContainer::addCube(const glm::vec3 &pos, Type type) {
     glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), pos);
     if(type == Type::Grass){
@@ -15,10 +19,9 @@ void CubesContainer::addCube(const glm::vec3 &pos, Type type) {
     else if(type == Type::Terrain){
         cubes.push_back(GrassCube(pos, Type::Terrain));
     }
-    setTypes();
     cubesModel.push_back(cubeModel);
-    topCubesPos.push_back(pos);
-    sideCubesPos.push_back(pos);
+    visibleCubePos.push_back(pos);
+    setTypes();
     setInstances();
 }
 
@@ -28,23 +31,23 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
             for(int k = 0; k < depth; k++){
                 glm::vec3 cubePos = pos + glm::vec3(i, -j, -k);
                 glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), cubePos);
+
                 if(j > 0) {
                     cubes.push_back(GrassCube(cubePos, Type::Terrain));
-                    cubesModel.push_back(cubeModel);
                 }
                 else if(j == 0){
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
-                    cubesModel.push_back(cubeModel);
-                    topCubesPos.push_back(cubePos);
                 }
-                if(i==0 || i==width-1 || k == 0 || k == depth-1){  //Cubi che si trovano ai lati
-                    sideCubesPos.push_back(cubePos);
+                cubesModel.push_back(cubeModel);
+                if(i==0 || i==width-1 || k == 0 || k == depth-1 || j== 0){  //Cubi che si trovano ai lati
+                    visibleCubePos.push_back(cubePos);
                 }
             }
         }
     }
     setTypes();
     setInstances();
+
 }
 
 void CubesContainer::drawCubes() const {
@@ -128,23 +131,17 @@ void CubesContainer::setInstances() {
 }
 
 
-const std::vector<glm::vec3> &CubesContainer::getTopCubesPos() const {
-    return topCubesPos;
-}
 
-const std::vector<glm::vec3> &CubesContainer::getSideCubesPos() const {
-    return sideCubesPos;
+
+const std::vector<glm::vec3> &CubesContainer::getVisibleCubesPos() const {
+    return visibleCubePos;
 }
 
 void CubesContainer::removeCube(const glm::vec3 &pos){
-    auto itTop = std::find(topCubesPos.begin(), topCubesPos.end(), pos);
-    auto itSide = std::find(sideCubesPos.begin(), sideCubesPos.end(), pos);
+    auto itCubePos = std::find(visibleCubePos.begin(), visibleCubePos.end(), pos);
 
-    if(itTop != topCubesPos.end()){
-        topCubesPos.erase(itTop);
-    }
-    if (itSide != sideCubesPos.end()){
-        sideCubesPos.erase(itSide);
+    if(itCubePos != visibleCubePos.end()){
+        visibleCubePos.erase(itCubePos);
     }
     GrassCube cube(pos, Type::Grass); //Per l'ugualinza; due blocchi sono uguali se hanno stessa pos
     auto itCube = std::find(cubes.begin(), cubes.end(), cube);
@@ -178,14 +175,14 @@ void CubesContainer::addSurroundingBlocksToVectors(const glm::vec3 &pos) {
         glm::vec3 surroundingCubePos = surroundingPos[i];
         if(isPresent(surroundingCubePos)){
             //Controllo non siano già presenti  o vengono aggiunti più volte
-            auto itTop = std::find(topCubesPos.begin(), topCubesPos.end(), surroundingCubePos);
-            auto itSide = std::find(sideCubesPos.begin(), sideCubesPos.end(), surroundingCubePos);
-            if(itTop == topCubesPos.end()) topCubesPos.push_back(surroundingCubePos);
-            if(itSide == sideCubesPos.end()) sideCubesPos.push_back(surroundingCubePos);
-            showVectorInfo(surroundingCubePos);
+            auto itCubePos = std::find(visibleCubePos.begin(), visibleCubePos.end(), surroundingCubePos);
+            if(itCubePos == visibleCubePos.end()){
+                visibleCubePos.push_back(surroundingCubePos);
+            }
         }
     }
 }
+
 
 
 
