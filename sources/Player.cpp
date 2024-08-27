@@ -119,7 +119,7 @@ void Player::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm:
     shader.useProgram();
     shader.changeUniform4M("view", view);
     shader.changeUniform4M("projection", projection);
-    shader.changeUniformVec3("position", cameraPos.x, cameraPos.y, cameraPos.z);
+    shader.changeUniformVec3("cameraPos", cameraPos.x, cameraPos.y, cameraPos.z);
     if(!firstPerson) { //Sennò se sono in prima persona mi vedo il cilindro addosso
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, (216 + 324 / 3) * 2);

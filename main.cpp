@@ -44,13 +44,13 @@ int main() {
     initOpenGL();
 
     CubesContainer container;
-    container.genCube(glm::vec3(-10, -1.5, 50), 100, 7, 100);
+    container.genCube(glm::vec3(-10, -1.5, 50), 100, 10, 100);
 
     Camera camera(glm::vec3(0.0, 0.0, 20.0), 0.3, 0.12);
 
-    Player player(glm::vec3(0.0, 0.0, 0.0), 0.14);
+    Player player(glm::vec3(50.0, 0.0, 0.0), 0.14);
     FirstPersonController firstPersonController(&camera, &player);
-    Sphere lightSource(glm::vec3 (0, 10, 30), player);
+    Sphere lightSource(glm::vec3 (40, 10, 30), player);
     SkyBox skyBox;
     PhysicsWorld physicsWorld(&player, &container);
     player.setPhysicsWorld(&physicsWorld);
@@ -123,7 +123,6 @@ void initWindow(sf::Window& window){
     settings.majorVersion = 3;
     settings.attributeFlags = sf::ContextSettings::Core;
     settings.depthBits = 24;
-    settings.antialiasingLevel = 4;
     window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Minecraft", sf::Style::Default, settings);
     window.setFramerateLimit(60);
     window.setActive();
@@ -136,7 +135,7 @@ void initOpenGL(){
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2, 0.3, 0.3, 1.0);
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glEnable(GL_MULTISAMPLE);
+    glDisable(GL_MULTISAMPLE); //Per avere migliori prestazione
     glLineWidth(5.0f); //Per il disegno del bordo dei cubi
 }
 

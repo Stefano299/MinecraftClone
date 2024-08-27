@@ -32,10 +32,10 @@ void CubesContainer::genCube(const glm::vec3& pos, int width, int height, int de
                 glm::vec3 cubePos = pos + glm::vec3(i, -j, -k);
                 glm::mat4 cubeModel = glm::translate(glm::mat4(1.0), cubePos);
 
-                if(j > 0) {
+                if(j > 0) { //Sono sotto il piano più alto
                     cubes.push_back(GrassCube(cubePos, Type::Terrain));
                 }
-                else if(j == 0){
+                else if(j == 0){  //Sono quelli in alto
                     cubes.push_back(GrassCube(cubePos, Type::Grass));
                 }
                 cubesModel.push_back(cubeModel);
